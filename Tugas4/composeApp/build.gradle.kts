@@ -57,6 +57,7 @@ kotlin {
             implementation(projects.shared)
             implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
             implementation(compose.material)
+            implementation(compose.materialIconsExtended) // Menambahkan library icons extended
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
