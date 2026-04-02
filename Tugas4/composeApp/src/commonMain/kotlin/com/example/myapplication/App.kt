@@ -10,28 +10,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.ProfileScreen
 import com.example.myapplication.viewmodel.ProfileViewModel
 
-// Custom Palette untuk tampilan lebih modern
-private val PrimaryColor = Color(0xFF6200EE)
-private val PrimaryVariant = Color(0xFF3700B3)
-private val SecondaryColor = Color(0xFF03DAC6)
+// Palette Biru - Putih - Hitam (Kotlin Style Blue)
+private val KotlinBlue = Color(0xFF0095D5)
+private val DeepBlue = Color(0xFF0077AA)
+private val DarkBackground = Color(0xFF0F172A) // Hitam kebiruan modern
+private val DarkSurface = Color(0xFF1E293B)
 
 private val LightColors = lightColors(
-    primary = PrimaryColor,
-    primaryVariant = PrimaryVariant,
-    secondary = SecondaryColor,
-    background = Color(0xFFF8F9FA),
+    primary = KotlinBlue,
+    primaryVariant = DeepBlue,
+    secondary = KotlinBlue,
+    background = Color(0xFFF1F5F9), // Putih kebiruan sangat terang
     surface = Color.White,
     onPrimary = Color.White,
-    onBackground = Color(0xFF212121),
-    onSurface = Color(0xFF212121)
+    onBackground = Color(0xFF1E293B),
+    onSurface = Color(0xFF1E293B)
 )
 
 private val DarkColors = darkColors(
-    primary = Color(0xFFBB86FC),
-    primaryVariant = PrimaryVariant,
-    secondary = Color(0xFF03DAC6),
-    background = Color(0xFF121212),
-    surface = Color(0xFF1E1E1E),
+    primary = Color(0xFF38BDF8), // Biru cerah untuk dark mode
+    primaryVariant = KotlinBlue,
+    secondary = Color(0xFF38BDF8),
+    background = DarkBackground,
+    surface = DarkSurface,
     onPrimary = Color.Black,
     onBackground = Color.White,
     onSurface = Color.White
