@@ -64,6 +64,12 @@ com.example.tugas5/
 
 ---
 
+## 🎥 Video Demo Aplikasi
+Berikut adalah link video demo aplikasi:
+[Link Video Demo Aplikasi Disini](https://youtu.be/CxQffiJ9_zc)
+
+---
+
 ## ️Navigation Flow Diagram
 Berikut adalah alur navigasi aplikasi:
 1.  **Notes Screen** (Home) ↔ **Favorites** ↔ **Profile** (via Bottom Bar/Drawer).
