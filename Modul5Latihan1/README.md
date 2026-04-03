@@ -18,14 +18,11 @@ Membuat alur navigasi sederhana antar layar:
 - [x] Verifikasi tombol back sistem
 
 ## Dokumentasi Hasil Latihan
-Silakan masukkan screenshot hasil latihan di bawah ini:
 
 ### 1. Home Screen
-> Masukkan screenshot Home Screen di sini
 > ![Home Screen](home.png)
 
 ### 2. Detail Screen
-> Masukkan screenshot Detail Screen di sini
 > ![Detail Screen](detail.png)
 
 ---
