@@ -12,13 +12,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 sealed class BottomNavItem(
     val route: String,
@@ -59,8 +59,12 @@ fun MainScreen() {
                         selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                         onClick = {
                             navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                                // Menggunakan route karena id mungkin tidak tersedia di versi KMP tertentu
+                                val startDest = navController.graph.findStartDestination().route
+                                if (startDest != null) {
+                                    popUpTo(startDest) {
+                                        saveState = true
+                                    }
                                 }
                                 launchSingleTop = true
                                 restoreState = true
