@@ -22,7 +22,7 @@ fun ProfileScreen() {
         topBar = {
             TopAppBar(
                 title = { Text("Profile") },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onTertiaryContainer
                 )

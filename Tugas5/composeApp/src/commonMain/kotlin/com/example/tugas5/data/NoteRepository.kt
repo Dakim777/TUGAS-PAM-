@@ -4,19 +4,18 @@ import com.example.tugas5.model.Note
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
 
 class NoteRepository {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes.asStateFlow()
 
     init {
-        // Initial data for testing
+        // Menggunakan full path agar tidak bentrok dengan kotlin.time.Clock
+        val now = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
         _notes.value = listOf(
-            Note("1", "Tugas PAM", "Mengerjakan tugas navigasi minggu ke-5", isFavorite = true, date = Clock.System.now().toEpochMilliseconds()),
-            Note("2", "Belanja", "Beli susu, telur, dan kopi", isFavorite = false, date = Clock.System.now().toEpochMilliseconds()),
-            Note("3", "Ide Project", "Membuat aplikasi pengingat minum air", isFavorite = true, date = Clock.System.now().toEpochMilliseconds())
+            Note("1", "Tugas PAM", "Mengerjakan tugas navigasi minggu ke-5", isFavorite = true, date = now),
+            Note("2", "Belanja", "Beli susu, telur, dan kopi", isFavorite = false, date = now),
+            Note("3", "Ide Project", "Membuat aplikasi pengingat minum air", isFavorite = true, date = now)
         )
     }
 
@@ -25,13 +24,14 @@ class NoteRepository {
     }
 
     fun addNote(title: String, content: String) {
+        val now = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
         val newNote = Note(
-            id = (Clock.System.now().toEpochMilliseconds()).toString(),
+            id = now.toString(),
             title = title,
             content = content,
-            date = Clock.System.now().toEpochMilliseconds()
+            date = now
         )
-        _notes.value = _notes.value + newNote
+        _notes.value += newNote
     }
 
     fun updateNote(id: String, title: String, content: String) {

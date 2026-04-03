@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -16,15 +17,32 @@ import com.example.tugas5.data.NoteRepository
 import com.example.tugas5.navigation.BottomBarScreen
 import com.example.tugas5.navigation.Screen
 import com.example.tugas5.screens.*
-import androidx.compose.ui.tooling.preview.Preview
 
+private val GreenPrimary = Color(0xFF2E7D32)
+private val GreenSecondary = Color(0xFF4CAF50)
+private val WhiteBackground = Color(0xFFFFFFFF)
+private val LightGreenContainer = Color(0xFFE8F5E9)
+
+private val LightColorScheme = lightColorScheme(
+    primary = GreenPrimary,
+    onPrimary = Color.White,
+    primaryContainer = LightGreenContainer,
+    onPrimaryContainer = GreenPrimary,
+    secondary = GreenSecondary,
+    onSecondary = Color.White,
+    background = WhiteBackground,
+    surface = WhiteBackground,
+    onSurface = Color.Black,
+    surfaceVariant = LightGreenContainer
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun App() {
     val navController = rememberNavController()
     val repository = remember { NoteRepository() }
 
-    MaterialTheme {
+    MaterialTheme(colorScheme = LightColorScheme) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
@@ -37,17 +55,28 @@ fun App() {
         Scaffold(
             bottomBar = {
                 if (showBottomBar) {
-                    NavigationBar {
+                    NavigationBar(
+                        containerColor = WhiteBackground,
+                        contentColor = GreenPrimary
+                    ) {
                         val items = listOf(
                             BottomBarScreen.Notes,
                             BottomBarScreen.Favorites,
                             BottomBarScreen.Profile
                         )
                         items.forEach { screen ->
+                            val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
                             NavigationBarItem(
                                 icon = { Icon(screen.icon, contentDescription = screen.title) },
                                 label = { Text(screen.title) },
-                                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                                selected = selected,
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = GreenPrimary,
+                                    selectedTextColor = GreenPrimary,
+                                    unselectedIconColor = Color.Gray,
+                                    unselectedTextColor = Color.Gray,
+                                    indicatorColor = LightGreenContainer
+                                ),
                                 onClick = {
                                     navController.navigate(screen.route) {
                                         val startDest = navController.graph.findStartDestination()
