@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +16,7 @@ import com.example.tugas5.data.NoteRepository
 import com.example.tugas5.navigation.BottomBarScreen
 import com.example.tugas5.navigation.Screen
 import com.example.tugas5.screens.*
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
@@ -51,7 +50,8 @@ fun App() {
                                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                                 onClick = {
                                     navController.navigate(screen.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
+                                        val startDest = navController.graph.findStartDestination()
+                                        popUpTo(startDest.route ?: return@navigate) {
                                             saveState = true
                                         }
                                         launchSingleTop = true
