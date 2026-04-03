@@ -1,95 +1,85 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM), Server.
+# Tugas 5: Pengembangan Notes App dengan Fitur Navigasi
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Aplikasi ini merupakan pengembangan dari aplikasi catatan (Notes App) sebelumnya dengan penambahan sistem navigasi yang kompleks menggunakan **Jetpack Compose Navigation**. Desain aplikasi mengusung tema **Putih & Hijau** yang terinspirasi dari identitas **ITERA**.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
-
-* [/server](./server/src/main/kotlin) is for the Ktor server application.
-
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
-
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run Desktop (JVM) Application
-
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
-
-### Build and Run Server
-
-To build and run the development version of the server, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :server:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :server:run
-  ```
-
-### Build and Run Web Application
-
-To build and run the development version of the web app, use the run configuration from the run widget
-in your IDE's toolbar or run it directly from the terminal:
-- for the Wasm target (faster, modern browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-- for the JS target (slower, supports older browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:jsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
-    ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+## 👤 Informasi Mahasiswa
+*   **Nama:** M.Daffa Hakim Matondang
+*   **NIM:** 123140002
+*   **Program Studi:** Teknik Informatika
+*   **Instansi:** Institut Teknologi Sumatera (ITERA)
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## 🚀 Fitur Utama
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+Aplikasi ini telah memenuhi seluruh kriteria tugas, yaitu:
+1.  **Bottom Navigation**: 3 Tab utama (Notes, Favorites, Profile) dengan state yang sinkron.
+2.  **Navigation with Arguments**: Passing `noteId` dari List ke Detail dan dari Detail ke Edit Screen.
+3.  **Forward & Back Navigation**: Navigasi antar layar yang proper menggunakan `NavController`.
+4.  **Floating Action Button (FAB)**: Navigasi cepat untuk menambah catatan baru.
+5.  **Bonus Feature (+10%)**: Implementasi **Navigation Drawer** (Hamburger Menu) yang sinkron dengan Bottom Navigation.
+
+---
+
+## 🛠️ Struktur Proyek
+
+Sesuai instruksi, kode diatur secara modular untuk kemudahan maintenance:
+
+```text
+com.example.tugas5/
+├── components/      # Komponen UI reusable (NoteItem, dll)
+├── data/            # Repository dan Mock Data
+├── model/           # Data Class (Note)
+├── navigation/      # Definisi Route dan Sealed Class Navigasi
+└── screens/         # Semua layar aplikasi (Notes, Detail, Profile, dll)
+```
+
+---
+
+## 📸 Dokumentasi Fitur (Screenshots)
+
+### 1. Navigasi Utama (Bottom Bar & Drawer)
+| Fitur | Screenshot                    | Keterangan |
+|---|-------------------------------|---|
+| **Bottom Navigation** | ![Bottom Bar](bottom_nav.png) | Navigasi antar 3 tab utama. |
+| **Navigation Drawer** | ![Drawer Bonus](drawer.png)   | Fitur Bonus: Menu samping untuk navigasi. |
+
+### 2. Manajemen Catatan
+| Fitur | Screenshot | Keterangan |
+|---|---|---|
+| **Notes List** | ![Notes List](note_list.png) | Daftar utama seluruh catatan dengan tema hijau. |
+| **Favorites** | ![Favorites](favorites.png) | Daftar catatan yang ditandai sebagai favorit. |
+| **Note Detail** | ![Note Detail](note_detail.png) | Menampilkan isi catatan lengkap berdasarkan `noteId`. |
+
+### 3. Operasi CRUD & Navigasi Argumen
+| Fitur | Screenshot                  | Keterangan |
+|---|-----------------------------|---|
+| **Add Note** | ![Add Note](add_new.png)    | Layar tambah catatan baru via FAB. |
+| **Edit Note** | ![Edit Note](edit_note.png) | Navigasi dengan argumen `noteId` untuk mengedit data. |
+
+### 4. Profil Pengguna
+| Fitur | Screenshot | Keterangan |
+|---|---|---|
+| **Profile Screen** | ![Profile](profile.png) | Data diri mahasiswa Informatika ITERA. |
+
+---
+
+## 🗺️ Navigation Flow Diagram
+Berikut adalah alur navigasi aplikasi:
+1.  **Notes Screen** (Home) ↔ **Favorites** ↔ **Profile** (via Bottom Bar/Drawer).
+2.  **Notes Screen** → **Note Detail** (Klik Item).
+3.  **Notes Screen** → **Add Note** (Klik FAB).
+4.  **Note Detail** → **Edit Note** (Klik Icon Edit).
+5.  **Back Navigation** tersedia di semua sub-layar melalui tombol Back di Top Bar.
+
+---
+
+## 💻 Tech Stack
+*   **Kotlin Multiplatform (KMP)**
+*   **Jetpack Compose** (UI Framework)
+*   **Compose Navigation** (Routing)
+*   **Material Design 3** (Theme & Components)
+*   **Kotlinx Coroutines & Flow** (Data State Management)
+
+---
+*Tugas Mata Kuliah Pengembangan Aplikasi Mobile (PAM).*

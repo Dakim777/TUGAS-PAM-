@@ -60,7 +60,7 @@ fun NoteItem(
                 Icon(
                     imageVector = if (note.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite",
-                    tint = if (note.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                    tint = if (note.isFavorite) Color.Red else MaterialTheme.colorScheme.outline
                 )
             }
         }
