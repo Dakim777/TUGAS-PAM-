@@ -1,6 +1,5 @@
 package com.example.tugas5.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -10,10 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,8 +20,8 @@ fun ProfileScreen() {
             TopAppBar(
                 title = { Text("Profile") },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
@@ -42,26 +39,27 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .size(120.dp)
                     .clip(CircleShape),
-                color = MaterialTheme.colorScheme.secondaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Profile Picture",
                     modifier = Modifier.padding(24.dp),
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
             
             Spacer(modifier = Modifier.height(24.dp))
             
             Text(
-                text = "Dakim",
+                text = "Daffa",
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
             
             Text(
-                text = "dakim@example.com",
+                text = "daffa@itera.ac.id",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -71,8 +69,9 @@ fun ProfileScreen() {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
@@ -80,11 +79,12 @@ fun ProfileScreen() {
                     Text(
                         text = "About Me",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "I am a mobile developer enthusiast currently studying Android development with Jetpack Compose.",
+                        text = "Saya adalah mahasiswa informatika ITERA yang sedang mendalami pengembangan aplikasi mobile menggunakan Jetpack Compose.",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
