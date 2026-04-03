@@ -2,7 +2,7 @@
 
 Aplikasi ini merupakan pengembangan dari aplikasi catatan (Notes App) sebelumnya dengan penambahan sistem navigasi yang kompleks menggunakan **Jetpack Compose Navigation**. Desain aplikasi mengusung tema **Putih & Hijau** yang terinspirasi dari identitas **ITERA**.
 
-## 👤 Informasi Mahasiswa
+## Informasi Mahasiswa
 *   **Nama:** M.Daffa Hakim Matondang
 *   **NIM:** 123140002
 *   **Program Studi:** Teknik Informatika
@@ -10,7 +10,7 @@ Aplikasi ini merupakan pengembangan dari aplikasi catatan (Notes App) sebelumnya
 
 ---
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 Aplikasi ini telah memenuhi seluruh kriteria tugas, yaitu:
 1.  **Bottom Navigation**: 3 Tab utama (Notes, Favorites, Profile) dengan state yang sinkron.
@@ -21,7 +21,7 @@ Aplikasi ini telah memenuhi seluruh kriteria tugas, yaitu:
 
 ---
 
-## 🛠️ Struktur Proyek
+##  Struktur Proyek
 
 Sesuai instruksi, kode diatur secara modular untuk kemudahan maintenance:
 
@@ -36,7 +36,7 @@ com.example.tugas5/
 
 ---
 
-## 📸 Dokumentasi Fitur (Screenshots)
+## Dokumentasi Fitur (Screenshots)
 
 ### 1. Navigasi Utama (Bottom Bar & Drawer)
 | Fitur | Screenshot                    | Keterangan |
@@ -64,7 +64,7 @@ com.example.tugas5/
 
 ---
 
-## 🗺️ Navigation Flow Diagram
+## ️Navigation Flow Diagram
 Berikut adalah alur navigasi aplikasi:
 1.  **Notes Screen** (Home) ↔ **Favorites** ↔ **Profile** (via Bottom Bar/Drawer).
 2.  **Notes Screen** → **Note Detail** (Klik Item).
@@ -74,7 +74,7 @@ Berikut adalah alur navigasi aplikasi:
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 *   **Kotlin Multiplatform (KMP)**
 *   **Jetpack Compose** (UI Framework)
 *   **Compose Navigation** (Routing)
