@@ -12,6 +12,8 @@ object HttpClientFactory {
                 json(Json {
                     ignoreUnknownKeys = true
                     coerceInputValues = true
+                    isLenient = true
+                    encodeDefaults = true
                 })
             }
         }

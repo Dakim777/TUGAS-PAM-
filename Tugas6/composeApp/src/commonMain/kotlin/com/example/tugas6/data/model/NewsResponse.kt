@@ -5,8 +5,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NewsResponse(
     val status: String,
-    val totalResults: Int,
-    val articles: List<Article>
+    val totalResults: Int = 0,
+    val articles: List<Article> = emptyList(),
+    val message: String? = null
 )
 
 @Serializable

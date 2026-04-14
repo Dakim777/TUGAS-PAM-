@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +18,7 @@ fun NewsListScreen(
     onArticleClick: (Article) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
-    // Logika sederhana: Kita anggap sedang refreshing jika loading tapi sebelumnya sudah ada data (untuk demo)
-    // Di aplikasi nyata, kita bisa punya state 'isRefreshing' terpisah di ViewModel
-    val isRefreshing = false 
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     Scaffold(
         topBar = {
@@ -39,7 +37,7 @@ fun NewsListScreen(
                 is NewsUiState.Success -> {
                     PullToRefreshBox(
                         isRefreshing = isRefreshing,
-                        onRefresh = { viewModel.fetchTopHeadlines() },
+                        onRefresh = { viewModel.fetchTopHeadlines(isRefresh = true) },
                         modifier = Modifier.fillMaxSize()
                     ) {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -58,7 +56,11 @@ fun NewsListScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = "Error: ${state.message}", color = MaterialTheme.colorScheme.error)
+                        Text(
+                            text = "Error: ${state.message}",
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { viewModel.fetchTopHeadlines() }) {
                             Text("Retry")
