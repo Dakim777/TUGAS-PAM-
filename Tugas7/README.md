@@ -108,6 +108,6 @@ Fitur keamanan agar catatan tidak terhapus secara tidak sengaja.
 
 ---
 
-**Disusun oleh:** Daffa
-**Mata Kuliah:** Pemrograman Aplikasi Mobile
+**Disusun oleh:** Muhammad Daffa Hakim Matondang 123140002
+**Mata Kuliah:** Pengembangan Aplikasi Mobile
 **Tugas:** Tugas 7 - Upgrade Notes App (SQLDelight, Settings, CRUD)
