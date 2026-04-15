@@ -2,12 +2,17 @@
 
 Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatform (KMP)**. Aplikasi ini menyajikan berita terbaru dari NewsAPI dengan antarmuka yang bersih, responsif, dan mendukung fitur offline caching.
 
+## Demo Aplikasi
+Tonton video demo aplikasi melalui tautan berikut:
+[**[Klik di Sini] Video Demo News Reader App - YouTube**](https://youtu.be/gXc1IzQ95o0)
+
 ## Fitur Utama
 
 - **Real-time News Fetching**: Mengambil berita terbaru dari NewsAPI (Top Headlines).
 - **List & Detail View**: Navigasi antar halaman daftar berita ke detail artikel yang komprehensif.
 - **Pull to Refresh**: Memperbarui berita dengan sekali tarik (swipe down).
-- **Modern UI/UX**: Desain menggunakan Material 3 dengan palet warna Biru Muda & Putih.
+- **Modern UI/UX**: Desain menggunakan Material 3 dengan palet warna **Hijau Soft & Putih**.
+- **Online/Offline Status**: Indikator status koneksi internet di Top Bar (Wifi/Wifi Off).
 - **Headline Images**: Menampilkan gambar utama berita menggunakan library Kamel.
 - **Referral Link**: Opsi "Baca Selengkapnya" yang mengarahkan pengguna ke sumber asli berita.
 - **Offline Caching (Bonus)**: Tetap bisa membaca berita terakhir meskipun tanpa koneksi internet.
@@ -28,7 +33,7 @@ Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatfor
 | :--- | :--- | :---: |
 | **API Integration (25%)** | Implementasi Ktor Client dengan penanganan API Key via Header/Parameter. | 25% |
 | **Data Parsing (20%)** | Penggunaan Kotlinx Serialization pada model data yang kompleks. | 20% |
-| **UI States (25%)** | Penanganan state Loading (Indikator), Success (List), dan Error (Retry button). | 25% |
+| **UI States (25%)** | Penanganan state Loading, Success, dan Error dengan indikator Online/Offline. | 25% |
 | **Architecture (20%)** | Pemisahan layer yang bersih: UI, ViewModel, Repository, dan Data Source. | 20% |
 | **Code Quality (10%)** | Clean code, penggunaan Material 3, dan penamaan variabel yang deskriptif. | 10% |
 | **Bonus (+10%)** | **Offline Caching** menggunakan local storage terimplementasi. | +10% |
@@ -66,8 +71,8 @@ Berikut adalah visualisasi dari fitur-fitur yang telah diimplementasikan:
 
 ![Detail Artikel](detail.png)
 
-### 4. Offline Mode (Caching)
-*Aplikasi menampilkan data terakhir yang tersimpan saat koneksi internet terputus.*
+### 4. Offline Mode & Status Indicator
+*Indikator status "Offline" muncul di Top Bar dan Banner peringatan saat koneksi internet terputus.*
 
 ![Mode Offline](offline.png)
 
