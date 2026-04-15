@@ -34,3 +34,4 @@ SELECT *
 FROM Note
 WHERE title LIKE ('%' || ? || '%') OR content LIKE ('%' || ? || '%')
 ORDER BY updated_at DESC;
+

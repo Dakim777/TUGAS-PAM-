@@ -2,6 +2,9 @@
 
 **Daffa Notes** adalah aplikasi manajemen catatan (Notes App) berbasis Android yang dikembangkan menggunakan **Kotlin Multiplatform (KMP)** dengan **Compose Multiplatform**. Aplikasi ini dirancang untuk memenuhi kriteria tugas pengembangan aplikasi mobile modern dengan fitur lengkap, performa yang optimal, dan antarmuka pengguna (UI) yang estetik dengan tema warna Hijau (Full Green).
 
+## Link Demo Aplikasi
+[Tonton Demo Aplikasi di Sini](https://youtu.be/demo-aplikasi-daffa-notes)
+
 ---
 
 ## Deskripsi Tugas
@@ -27,9 +30,9 @@ Tugas ini bertujuan untuk meng-upgrade aplikasi catatan standar menjadi aplikasi
 
 ---
 
-## Database Schema (SQLDelight)
+## Database Schema & Sinkronisasi Data
 
-Aplikasi menggunakan SQLDelight untuk mengelola database SQLite. Skema ini mendukung pencatatan waktu pembuatan dan pembaruan secara otomatis.
+Aplikasi menggunakan SQLDelight untuk mengelola database SQLite. Berikut adalah struktur tabel dan bukti sinkronisasi data antara aplikasi (Live POV) dengan database inspector.
 
 ### Tabel: Note
 Definisi tabel di file `Note.sq`:
@@ -44,17 +47,20 @@ CREATE TABLE Note (
 );
 ```
 
-### Daftar Query:
-*   `selectAll`: Mengambil semua catatan, diurutkan berdasarkan waktu pembaruan terbaru.
-*   `selectById`: Mengambil detail satu catatan berdasarkan ID unik.
-*   `insert`: Menambahkan catatan baru ke database.
-*   `update`: Memperbarui judul, isi, dan waktu pembaruan catatan yang sudah ada.
-*   `delete`: Menghapus catatan secara permanen berdasarkan ID.
-*   `search`: Mencari catatan di mana keyword ditemukan pada kolom `title` atau `content`.
+### Sinkronisasi Data (Live App POV vs Database Inspector)
+Bagian ini menunjukkan bahwa data yang diinput melalui aplikasi secara *real-time* tersimpan dan tersinkronisasi dengan database SQLite.
+
+**1. Tampilan Live di Aplikasi (App POV):**
+Menampilkan daftar catatan yang sedang aktif di aplikasi.
+![Live List Aplikasi](livelist.png)
+
+**2. Tampilan di Tabel SQL (Database Inspector):**
+Menunjukkan data yang sama persis telah masuk ke dalam tabel database di Android Studio.
+![Data Tabel SQL](databasetabel.png)
 
 ---
 
-## Screenshot Per-Halaman
+## Screenshot Per-Halaman (Dokumentasi Aplikasi)
 
 Berikut adalah detail visual dari setiap layar aplikasi **Daffa Notes**:
 
@@ -62,35 +68,26 @@ Berikut adalah detail visual dari setiap layar aplikasi **Daffa Notes**:
 Menampilkan daftar catatan dalam bentuk kartu (Card).
 -   **Warna**: Menggunakan tema hijau pudar (Fade Green) untuk kartu agar nyaman di mata.
 -   **Identitas**: Judul aplikasi di TopAppBar berubah menjadi **Daffa Notes**.
--   **Fitur**: Terdapat search bar dan tombol Floating Action Button (FAB) untuk tambah catatan.
 ![Layar Utama](homescreen.png)
 
 ### 2. Layar Kosong (Empty State)
 State yang muncul saat database belum memiliki data.
--   **Visual**: Menampilkan ikon pencarian besar dan teks "Belum ada catatan" dengan warna yang halus.
 ![Layar Kosong](empty.png)
 
 ### 3. Layar Tambah/Edit (Add/Edit Screen)
 Formulir input untuk judul dan isi catatan.
--   **Validasi**: Tombol "Save Note" hanya aktif jika judul dan isi tidak kosong.
--   **Navigasi**: Dilengkapi tombol kembali di kiri atas.
 ![Layar Tambah Edit](addnotes.png)
 
 ### 4. Fitur Pencarian (Search Functionality)
-UI saat pengguna mengetik di bar pencarian.
--   **Perilaku**: Daftar catatan akan terfilter secara real-time berdasarkan kata kunci yang dimasukkan.
+Hasil filter catatan secara real-time berdasarkan kata kunci.
 ![Fitur Pencarian](search.png)
 
 ### 5. Layar Pengaturan (Settings Screen)
-Halaman untuk kustomisasi aplikasi.
--   **Theme**: Pilihan mode Light, Dark, atau mengikuti sistem.
--   **Sort Order**: Pilihan urutan "Newest First" atau "Oldest First".
+Halaman untuk kustomisasi tema dan urutan sortir.
 ![Layar Pengaturan](setting.png)
 
 ### 6. Dialog Konfirmasi Hapus (UX Safety)
-Fitur keamanan agar catatan tidak terhapus secara tidak sengaja.
--   **Pemicu**: Muncul saat ikon tong sampah ditekan.
--   **Opsi**: Pengguna harus mengonfirmasi ulang untuk benar-benar menghapus data.
+Fitur keamanan dialog konfirmasi saat ingin menghapus data.
 ![Konfirmasi Hapus](notifdelete.png)
 
 ---
