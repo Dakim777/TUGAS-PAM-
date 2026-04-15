@@ -3,7 +3,7 @@
 **Daffa Notes** adalah aplikasi manajemen catatan (Notes App) berbasis Android yang dikembangkan menggunakan **Kotlin Multiplatform (KMP)** dengan **Compose Multiplatform**. Aplikasi ini dirancang untuk memenuhi kriteria tugas pengembangan aplikasi mobile modern dengan fitur lengkap, performa yang optimal, dan antarmuka pengguna (UI) yang estetik dengan tema warna Hijau (Full Green).
 
 ## Link Demo Aplikasi
-[Tonton Demo Aplikasi di Sini](https://youtu.be/demo-aplikasi-daffa-notes)
+[Tonton Demo Aplikasi di Sini](https://youtu.be/YENuPMm2YmY)
 
 ---
 
