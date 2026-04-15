@@ -30,9 +30,11 @@ class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
 
             try {
                 repository.getTopHeadlines()
-                    .onSuccess { articles ->
-                        // Langsung success saja walaupun kosong agar tidak muncul pesan error merah
-                        _uiState.value = NewsUiState.Success(articles)
+                    .onSuccess { newsData ->
+                        _uiState.value = NewsUiState.Success(
+                            articles = newsData.articles,
+                            isOffline = newsData.isFromCache
+                        )
                     }
                     .onFailure { exception ->
                         _uiState.value = NewsUiState.Error(exception.message ?: "Gagal mengambil data.")

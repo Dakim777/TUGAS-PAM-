@@ -30,40 +30,35 @@ fun NewsCard(
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column {
-            // Bagian Gambar Headline
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
-                if (!article.urlToImage.isNullOrBlank()) {
+                val imageUrl = article.urlToImage
+                if (!imageUrl.isNullOrBlank()) {
                     KamelImage(
-                        resource = asyncPainterResource(article.urlToImage),
+                        resource = asyncPainterResource(imageUrl),
                         contentDescription = article.title,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
-                        onLoading = { progress ->
-                            CircularProgressIndicator(
-                                progress = progress,
-                                modifier = Modifier.align(Alignment.Center).size(32.dp),
-                                strokeWidth = 2.dp
-                            )
+                        onLoading = {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                            }
                         },
                         onFailure = {
-                            Icon(
-                                imageVector = Icons.Default.BrokenImage,
-                                contentDescription = null,
-                                modifier = Modifier.align(Alignment.Center).size(48.dp),
-                                tint = MaterialTheme.colorScheme.outline
-                            )
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Icon(Icons.Default.BrokenImage, null, tint = MaterialTheme.colorScheme.outline)
+                            }
                         }
                     )
                 } else {
-                    // Fitur Ikon Headline jika gambar null
                     Icon(
                         imageVector = Icons.Default.Image,
                         contentDescription = null,
@@ -73,7 +68,6 @@ fun NewsCard(
                 }
             }
             
-            // Bagian Teks Info
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = article.title,
@@ -86,7 +80,7 @@ fun NewsCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Text(
-                    text = article.description ?: "Sentuh untuk membaca detail berita selengkapnya...",
+                    text = article.description ?: "Sentuh untuk melihat detail berita...",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
@@ -97,17 +91,16 @@ fun NewsCard(
                 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = article.source?.name ?: "Berita Utama",
+                        text = article.source?.name ?: "News",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = article.publishedAt.take(10), // Ambil tanggal saja (YYYY-MM-DD)
+                        text = article.publishedAt.split("T")[0],
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline
                     )

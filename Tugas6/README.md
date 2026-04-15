@@ -54,22 +54,22 @@ Berikut adalah visualisasi dari fitur-fitur yang telah diimplementasikan:
 ### 1. Halaman Utama (News List)
 *Menampilkan daftar berita terbaru dengan gambar headline, judul, deskripsi singkat, dan sumber berita.*
 
-![Halaman Utama](home.png)
+![Halaman Utama](del3.png)
 
 ### 2. Loading State & Initial State
 *Kondisi awal aplikasi saat pertama kali memuat data.*
 
-![Awal Aplikasi](awal.png)
+![Awal Aplikasi](del4.png)
 
 ### 3. Detail Artikel & Fitur Referral
 *Halaman detail dengan konten lengkap dan tombol "Baca Selengkapnya" untuk membuka link asli.*
 
-![Detail Artikel](detail.png)
+![Detail Artikel](del2.png)
 
 ### 4. Offline Mode (Caching)
 *Aplikasi menampilkan data terakhir yang tersimpan saat koneksi internet terputus.*
 
-![Mode Offline](offline.png)
+![Mode Offline](del1.png)
 
 ---
 

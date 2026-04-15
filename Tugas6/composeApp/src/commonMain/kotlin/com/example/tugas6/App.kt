@@ -11,12 +11,12 @@ import com.example.tugas6.presentation.NewsDetailScreen
 import com.example.tugas6.presentation.NewsListScreen
 import com.example.tugas6.presentation.NewsViewModel
 
-// Definisi palet warna Biru Muda & Putih
-private val BlueLightPrimary = Color(0xFF007BFF)
-private val BlueLightSecondary = Color(0xFFE3F2FD)
-private val BlueLightBackground = Color(0xFFF8F9FA)
-private val BlueLightOnPrimary = Color.White
-private val BlueLightSurface = Color.White
+// Definisi palet warna Hijau Soft & Putih
+private val GreenSoftPrimary = Color(0xFF4CAF50)
+private val GreenSoftSecondary = Color(0xFFC8E6C9)
+private val GreenSoftBackground = Color(0xFFFAFAFA)
+private val GreenSoftOnPrimary = Color.White
+private val GreenSoftSurface = Color.White
 
 @Composable
 fun AppTheme(
@@ -24,14 +24,20 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = lightColorScheme(
-        primary = BlueLightPrimary,
-        onPrimary = BlueLightOnPrimary,
-        primaryContainer = BlueLightSecondary,
-        onPrimaryContainer = BlueLightPrimary,
-        background = BlueLightBackground,
-        surface = BlueLightSurface,
-        onSurface = Color.Black,
-        onBackground = Color.Black
+        primary = GreenSoftPrimary,
+        onPrimary = GreenSoftOnPrimary,
+        primaryContainer = GreenSoftSecondary,
+        onPrimaryContainer = Color(0xFF1B5E20),
+        background = GreenSoftBackground,
+        surface = GreenSoftSurface,
+        onSurface = Color(0xFF212121),
+        onBackground = Color(0xFF212121),
+        secondary = Color(0xFF81C784),
+        onSecondary = Color.White,
+        error = Color(0xFFB00020),
+        onError = Color.White,
+        errorContainer = Color(0xFFFDE7E9),
+        onErrorContainer = Color(0xFF601410)
     )
 
     MaterialTheme(

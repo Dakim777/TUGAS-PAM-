@@ -1,5 +1,6 @@
 package com.example.tugas6.data.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,6 +18,7 @@ data class Article(
     val title: String,
     val description: String? = null,
     val url: String,
+    @SerialName("urlToImage") // Memastikan field ini tertangkap dengan benar
     val urlToImage: String? = null,
     val publishedAt: String,
     val content: String? = null

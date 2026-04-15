@@ -10,33 +10,43 @@ import io.ktor.client.request.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+data class NewsData(
+    val articles: List<Article>,
+    val isFromCache: Boolean
+)
+
 class NewsRepository(private val httpClient: HttpClient) {
     private val apiKey = "f124b738bf26483c997b934cc672d803"
     private val baseUrl = "https://newsapi.org/v2"
     
-    // Inisialisasi local settings untuk caching
     private val settings: Settings = Settings()
     private val CACHE_KEY = "news_cache"
 
-    suspend fun getTopHeadlines(country: String = "us"): Result<List<Article>> {
+    suspend fun getTopHeadlines(country: String = "us"): Result<NewsData> {
         return try {
-            // 1. Coba ambil data dari Network
             val response: NewsResponse = httpClient.get("$baseUrl/top-headlines") {
                 parameter("country", country)
                 parameter("apiKey", apiKey)
             }.body()
             
             if (response.status == "ok") {
-                // 2. Jika sukses, simpan ke cache (Bonus Fitur)
                 saveToCache(response.articles)
-                Result.success(response.articles)
+                Result.success(NewsData(response.articles, isFromCache = false))
             } else {
-                // 3. Jika API error, coba ambil dari cache
-                loadFromCache() ?: Result.failure(Exception(response.message))
+                val cached = loadFromCache()
+                if (cached != null) {
+                    Result.success(NewsData(cached, isFromCache = true))
+                } else {
+                    Result.failure(Exception(response.message))
+                }
             }
         } catch (e: Exception) {
-            // 4. Jika offline/no internet, ambil dari cache
-            loadFromCache() ?: Result.failure(e)
+            val cached = loadFromCache()
+            if (cached != null) {
+                Result.success(NewsData(cached, isFromCache = true))
+            } else {
+                Result.failure(e)
+            }
         }
     }
 
@@ -45,16 +55,14 @@ class NewsRepository(private val httpClient: HttpClient) {
             val jsonString = Json.encodeToString(articles)
             settings[CACHE_KEY] = jsonString
         } catch (e: Exception) {
-            // Gagal menyimpan cache tidak masalah bagi user
         }
     }
 
-    private fun loadFromCache(): Result<List<Article>>? {
+    private fun loadFromCache(): List<Article>? {
         val cachedData = settings.getStringOrNull(CACHE_KEY)
         return if (cachedData != null) {
             try {
-                val articles = Json.decodeFromString<List<Article>>(cachedData)
-                Result.success(articles)
+                Json.decodeFromString<List<Article>>(cachedData)
             } catch (e: Exception) {
                 null
             }
