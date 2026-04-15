@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -29,6 +30,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.sqldelight.android.driver)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -39,6 +41,14 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
+            implementation(libs.multiplatform.settings.core)
+            implementation(libs.multiplatform.settings.coroutines)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native-driver)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -73,7 +83,12 @@ android {
     }
 }
 
+sqldelight {
+    databases.create("NotesDatabase") {
+        packageName.set("com.example.notes.db")
+    }
+}
+
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
-

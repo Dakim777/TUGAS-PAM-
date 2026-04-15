@@ -1,0 +1,36 @@
+CREATE TABLE Note (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+selectAll:
+SELECT *
+FROM Note
+ORDER BY updated_at DESC;
+
+selectById:
+SELECT *
+FROM Note
+WHERE id = ?;
+
+insert:
+INSERT INTO Note (title, content, created_at, updated_at)
+VALUES (?, ?, ?, ?);
+
+update:
+UPDATE Note
+SET title = ?, content = ?, updated_at = ?
+WHERE id = ?;
+
+delete:
+DELETE FROM Note
+WHERE id = ?;
+
+search:
+SELECT *
+FROM Note
+WHERE title LIKE ('%' || ? || '%') OR content LIKE ('%' || ? || '%')
+ORDER BY updated_at DESC;
