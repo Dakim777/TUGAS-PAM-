@@ -38,10 +38,13 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(compose.materialIconsExtended) // Tambahkan ini untuk ikon Public
+            implementation(compose.materialIconsExtended)
             
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            
+            // Local Storage Bonus
+            implementation(libs.multiplatform.settings)
             
             // Ktor & Serialization
             implementation(libs.ktor.client.core)

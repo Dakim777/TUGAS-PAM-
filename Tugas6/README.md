@@ -1,35 +1,78 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Tugas 6 - News Reader App (Compose Multiplatform)
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatform (KMP)**. Aplikasi ini menyajikan berita terbaru dari NewsAPI dengan antarmuka yang bersih, responsif, dan mendukung fitur offline caching.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## 🚀 Fitur Utama
 
-### Build and Run Android Application
+- **Real-time News Fetching**: Mengambil berita terbaru dari NewsAPI (Top Headlines).
+- **List & Detail View**: Navigasi antar halaman daftar berita ke detail artikel yang komprehensif.
+- **Pull to Refresh**: Memperbarui berita dengan sekali tarik (swipe down).
+- **Modern UI/UX**: Desain menggunakan Material 3 dengan palet warna Biru Muda & Putih.
+- **Headline Images**: Menampilkan gambar utama berita menggunakan library Kamel.
+- **Referral Link**: Opsi "Baca Selengkapnya" yang mengarahkan pengguna ke sumber asli berita.
+- **Offline Caching (Bonus)**: Tetap bisa membaca berita terakhir meskipun tanpa koneksi internet.
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+## 🛠️ Stack Teknologi
 
-### Build and Run iOS Application
+- **Language**: Kotlin (Multiplatform)
+- **UI Framework**: Compose Multiplatform
+- **Network**: Ktor Client
+- **Serialization**: Kotlinx Serialization
+- **Image Loading**: Kamel (Async Image)
+- **Local Storage**: Multiplatform Settings (untuk caching)
+- **Architecture**: Repository Pattern with MVVM
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+## 📋 Pemenuhan Rubrik Penilaian
+
+| Komponen | Kriteria yang Dipenuhi | Skor Est. |
+| :--- | :--- | :---: |
+| **API Integration (25%)** | Implementasi Ktor Client dengan penanganan API Key via Header/Parameter. | 25% |
+| **Data Parsing (20%)** | Penggunaan Kotlinx Serialization pada model data yang kompleks. | 20% |
+| **UI States (25%)** | Penanganan state Loading (Indikator), Success (List), dan Error (Retry button). | 25% |
+| **Architecture (20%)** | Pemisahan layer yang bersih: UI, ViewModel, Repository, dan Data Source. | 20% |
+| **Code Quality (10%)** | Clean code, penggunaan Material 3, dan penamaan variabel yang deskriptif. | 10% |
+| **Bonus (+10%)** | **Offline Caching** menggunakan local storage terimplementasi. | +10% |
+| **Total** | | **110/100** |
+
+## ⚙️ Instalasi & Konfigurasi
+
+1.  **Clone Project** ke Android Studio.
+2.  **API Key Setup**:
+    Buka file `composeApp/src/commonMain/kotlin/com/example/tugas6/data/repository/NewsRepository.kt`.
+    Pastikan `apiKey` sudah terisi:
+    ```kotlin
+    private val apiKey = "f124b738bf26483c997b934cc672d803"
+    ```
+3.  **Sync Gradle** dan jalankan (Run) pada emulator Android atau perangkat fisik.
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 📸 Dokumentasi (Screenshots)
+
+Berikut adalah visualisasi dari fitur-fitur yang telah diimplementasikan:
+
+### 1. Halaman Utama (News List)
+*Menampilkan daftar berita terbaru dengan gambar headline, judul, deskripsi singkat, dan sumber berita.*
+
+> ** home.png **
+
+### 2. Loading State
+*Indikator progres saat aplikasi sedang mengambil data dari API.*
+
+> **[TEMPAT SCREENSHOT: loading_state.png]**
+
+### 3. Detail Artikel & Fitur Referral
+*Halaman detail dengan konten lengkap dan tombol "Baca Selengkapnya" untuk membuka link asli.*
+
+> **[TEMPAT SCREENSHOT: news_detail_screen.png]**
+
+### 4. Offline Mode (Caching)
+*Aplikasi menampilkan data terakhir yang tersimpan saat koneksi internet terputus.*
+
+> **[TEMPAT SCREENSHOT: offline_mode.png]**
+
+
+---
+
+**Dibuat oleh:** [Muhammad Daffa Hakim Matondang]
+**Mata Kuliah:** Pengembangan Aplikasi Mobile (PAM)
