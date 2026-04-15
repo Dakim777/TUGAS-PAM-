@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.sqldelight.coroutines)
             implementation(libs.multiplatform.settings.core)
             implementation(libs.multiplatform.settings.coroutines)
+            implementation(libs.kotlinx.datetime)
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native-driver)
