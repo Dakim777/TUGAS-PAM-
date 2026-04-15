@@ -2,7 +2,7 @@
 
 Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatform (KMP)**. Aplikasi ini menyajikan berita terbaru dari NewsAPI dengan antarmuka yang bersih, responsif, dan mendukung fitur offline caching.
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 - **Real-time News Fetching**: Mengambil berita terbaru dari NewsAPI (Top Headlines).
 - **List & Detail View**: Navigasi antar halaman daftar berita ke detail artikel yang komprehensif.
@@ -12,7 +12,7 @@ Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatfor
 - **Referral Link**: Opsi "Baca Selengkapnya" yang mengarahkan pengguna ke sumber asli berita.
 - **Offline Caching (Bonus)**: Tetap bisa membaca berita terakhir meskipun tanpa koneksi internet.
 
-## 🛠️ Stack Teknologi
+## Stack Teknologi
 
 - **Language**: Kotlin (Multiplatform)
 - **UI Framework**: Compose Multiplatform
@@ -22,7 +22,7 @@ Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatfor
 - **Local Storage**: Multiplatform Settings (untuk caching)
 - **Architecture**: Repository Pattern with MVVM
 
-## 📋 Pemenuhan Rubrik Penilaian
+## Pemenuhan Rubrik Penilaian
 
 | Komponen | Kriteria yang Dipenuhi | Skor Est. |
 | :--- | :--- | :---: |
@@ -34,7 +34,7 @@ Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatfor
 | **Bonus (+10%)** | **Offline Caching** menggunakan local storage terimplementasi. | +10% |
 | **Total** | | **110/100** |
 
-## ⚙️ Instalasi & Konfigurasi
+##  Instalasi & Konfigurasi
 
 1.  **Clone Project** ke Android Studio.
 2.  **API Key Setup**:
@@ -47,7 +47,7 @@ Aplikasi **News Reader** modern yang dibangun menggunakan **Compose Multiplatfor
 
 ---
 
-## 📸 Dokumentasi (Screenshots)
+## Dokumentasi (Screenshots)
 
 Berikut adalah visualisasi dari fitur-fitur yang telah diimplementasikan:
 
