@@ -1,11 +1,13 @@
 package com.example.notes.settings
 
-import com.russhwolf.multiplatformsettings.coroutines.FlowSettings
+import com.russhwolf.settings.ExperimentalSettingsApi
+import com.russhwolf.settings.coroutines.FlowSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
+@OptIn(ExperimentalSettingsApi::class)
 class SettingsManager(private val flowSettings: FlowSettings, scope: CoroutineScope) {
 
     companion object {

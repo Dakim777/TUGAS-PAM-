@@ -1,5 +1,11 @@
 package com.example.tugas7
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import platform.UIKit.UIApplication
+import platform.UIKit.setStatusBarStyle
+import platform.UIKit.UIStatusBarStyleDarkContent
+import platform.UIKit.UIStatusBarStyleLightContent
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
@@ -7,3 +13,12 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+@Composable
+actual fun SystemAppearance(isDark: Boolean) {
+    SideEffect {
+        UIApplication.sharedApplication.setStatusBarStyle(
+            if (isDark) UIStatusBarStyleLightContent else UIStatusBarStyleDarkContent
+        )
+    }
+}

@@ -11,8 +11,11 @@ plugins {
 
 kotlin {
     androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        @Suppress("DEPRECATION")
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
         }
     }
     
@@ -42,14 +45,18 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             
+            // Add Material Icons dependency to resolve 'Icons'
+            implementation(libs.compose.materialIconsExtended)
+            
             implementation(libs.sqldelight.runtime)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.multiplatform.settings.core)
+            implementation(libs.multiplatform.settings.noarg)
             implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.kotlinx.datetime)
         }
         iosMain.dependencies {
-            implementation(libs.sqldelight.native-driver)
+            implementation(libs.sqldelight.native.driver)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
