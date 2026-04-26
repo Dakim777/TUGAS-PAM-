@@ -2,7 +2,7 @@
 
 Proyek ini adalah aplikasi catatan (Notes) sederhana yang dibangun menggunakan **Kotlin Multiplatform (KMP)**. Aplikasi ini mendemonstrasikan implementasi **Dependency Injection (Koin)**, pola **expect/actual** untuk fitur spesifik platform, dan monitoring status perangkat secara real-time.
 
-## 📺 Video Demo Aplikasi
+## Video Demo Aplikasi
 Tonton video demo fitur (DI, Device Info, Network Status, & Battery Bonus) melalui link di bawah ini:
 
 [![Watch the video](https://img.shields.io/badge/YouTube-Video%20Demo-red?style=for-the-badge&logo=youtube)](https://youtu.be/6kWFYGtfWdE)
