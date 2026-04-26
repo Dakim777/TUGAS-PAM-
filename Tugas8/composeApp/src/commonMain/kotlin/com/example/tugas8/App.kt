@@ -22,6 +22,7 @@ fun App() {
     KoinAppContent()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KoinAppContent() {
     var currentScreen by remember { mutableStateOf(Screen.Main) }
@@ -113,6 +114,7 @@ fun MainScreen() {
 @Composable
 fun SettingsScreen() {
     val deviceInfo: DeviceInfo = koinInject()
+    val batteryInfo: BatteryInfo = koinInject()
 
     Column(
         modifier = Modifier
@@ -129,6 +131,8 @@ fun SettingsScreen() {
                 InfoRow(label = "Model", value = deviceInfo.getDeviceName())
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                 InfoRow(label = "OS Version", value = deviceInfo.getOsVersion())
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                InfoRow(label = "Battery Level", value = "${batteryInfo.getBatteryLevel()}%")
             }
         }
     }
