@@ -1,6 +1,13 @@
-# Tugas 8 PAM - Matcha Notes (KMP & Koin DI)
+# Tugas 8 PAM - Upgrade NotesApp (KMP & Koin DI)
 
 Proyek ini adalah aplikasi catatan (Notes) sederhana yang dibangun menggunakan **Kotlin Multiplatform (KMP)**. Aplikasi ini mendemonstrasikan implementasi **Dependency Injection (Koin)**, pola **expect/actual** untuk fitur spesifik platform, dan monitoring status perangkat secara real-time.
+
+## 📺 Video Demo Aplikasi
+Tonton video demo fitur (DI, Device Info, Network Status, & Battery Bonus) melalui link di bawah ini:
+
+[![Watch the video](https://img.shields.io/badge/YouTube-Video%20Demo-red?style=for-the-badge&logo=youtube)](https://youtu.be/6kWFYGtfWdE)
+
+---
 
 ## Fitur Utama
 - **CRUD Notes:** Menambah, melihat, mengedit, dan menghapus catatan .
@@ -65,7 +72,7 @@ graph TD
 
 
 ### 1. Main Screen & Network Indicator
-Tampilan utama aplikasi dengan tema Matcha dan banner indikator saat internet mati.
+Tampilan utama aplikasi dengan banner indikator saat internet mati.
 
 ![Network Status Indicator](network_indicator.png)
 
