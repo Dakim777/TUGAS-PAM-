@@ -67,17 +67,17 @@ graph TD
 ### 1. Main Screen & Network Indicator
 Tampilan utama aplikasi dengan tema Matcha dan banner indikator saat internet mati.
 
-![Network Status Indicator](screenshots/network_indicator.png)
+![Network Status Indicator](network_indicator.png)
 
 ### 2. Device Info & Battery (Settings)
 Halaman settings yang menampilkan informasi perangkat yang disuntikkan melalui DI.
 
-![Device & Battery Info](screenshots/device_info.png)
+![Device & Battery Info](device_info.png)
 
 ### 3. CRUD Operations
 Proses menambah atau mengedit catatan.
 
-![CRUD Operations](screenshots/crud_notes.png)
+![CRUD Operations](crud_notes.png)
 
 ---
 
