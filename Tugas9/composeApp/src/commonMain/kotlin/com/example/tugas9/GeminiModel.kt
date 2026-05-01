@@ -4,40 +4,35 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GeminiRequest(
-    val contents: List<Content>,
-    @SerialName("system_instruction") val systemInstruction: SystemContent? = null
-)
-
-@Serializable
-data class SystemContent(
-    val parts: List<Part>
-)
-
-@Serializable
-data class Content(
-    val role: String,
-    val parts: List<Part>
-)
-
-@Serializable
-data class Part(
-    val text: String
-)
-
-@Serializable
 data class GeminiResponse(
-    val candidates: List<Candidate>? = null,
-    val usageMetadata: UsageMetadata? = null
+    @SerialName("candidates")
+    val candidates: List<Candidate>? = null
 )
 
 @Serializable
 data class Candidate(
+    @SerialName("content")
     val content: Content? = null,
+    @SerialName("finishReason")
     val finishReason: String? = null
 )
 
 @Serializable
-data class UsageMetadata(
-    val totalTokenCount: Int? = null
+data class Content(
+    @SerialName("parts")
+    val parts: List<Part>? = null,
+    @SerialName("role")
+    val role: String? = null
+)
+
+@Serializable
+data class Part(
+    @SerialName("text")
+    val text: String? = null
+)
+
+@Serializable
+data class GeminiRequest(
+    @SerialName("contents")
+    val contents: List<Content>
 )

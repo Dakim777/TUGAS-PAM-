@@ -1,8 +1,11 @@
 package com.example.tugas9
 
-sealed class AIError(message: String) : Exception(message) {
-    object Unauthorized : AIError("Autentikasi gagal. API Key tidak valid.")
-    data class RateLimited(val retryAfterSeconds: Int) : AIError("Terlalu banyak permintaan. Coba lagi dalam $retryAfterSeconds detik.")
-    data class Unknown(val code: Int, override val message: String) : AIError(message)
-    data class NetworkError(override val message: String) : AIError(message)
+sealed class AIError : Exception() {
+    // Kata 'val' di sini wajib ada agar bisa dipanggil di Repository
+    data class RateLimited(val retryAfter: Int) : AIError()
+    data class Unauthorized(override val message: String) : AIError()
+    data class ServerError(override val message: String) : AIError()
+    data class NetworkError(override val message: String) : AIError()
+    data class ParseError(override val message: String) : AIError()
+    data class UnknownError(override val message: String) : AIError()
 }
