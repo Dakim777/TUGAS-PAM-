@@ -1,35 +1,23 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Tugas 9 - Integrasi Gemini AI
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Aplikasi asisten cerdas berbasis Kotlin Multiplatform yang mengintegrasikan Google Gemini AI.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Fitur AI
+- **Smart Chat Assistant**: Asisten digital yang ramah dan responsif untuk membantu menjawab berbagai pertanyaan pengguna.
+- **Contextual Conversation**: AI mampu memahami konteks percakapan berdasarkan riwayat pesan sebelumnya.
+- **System Prompt Engineering**: Menggunakan instruksi sistem yang dirancang khusus untuk memberikan persona asisten yang profesional.
 
-### Build and Run Android Application
+## Rubrik Penilaian & Implementasi
+1. **AI Integration (30%)**: Implementasi Ktor Client di `GeminiService` untuk memanggil API Gemini secara asinkron.
+2. **Prompt Engineering (25%)**: Instruksi sistem (System Prompt) yang mendefinisikan persona asisten di `AIRepository`.
+3. **Error Handling (20%)**: Penanganan error jaringan, kuota habis, dan kunci API tidak valid dengan logic retry otomatis (Exponential Backoff) di `ChatViewModel`.
+4. **UI/UX (15%)**: Antarmuka responsif menggunakan Jetpack Compose, dilengkapi dengan *loading states* (Typing Indicator) dan pesan error yang informatif.
+5. **Code Quality (10%)**: Arsitektur MVVM (Model-View-ViewModel) yang bersih dan terpisah antara UI, Repository, dan Service.
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
-
----
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Cara Konfigurasi
+1. Dapatkan API Key dari [Google AI Studio](https://aistudio.google.com/).
+2. Tambahkan API Key ke dalam file `local.properties` di root project:
+   ```properties
+   API_KEY=YOUR_GEMINI_API_KEY
+   ```
+3. Jalankan aplikasi melalui Android Studio.

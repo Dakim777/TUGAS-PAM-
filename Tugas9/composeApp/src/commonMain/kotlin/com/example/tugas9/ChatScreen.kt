@@ -1,5 +1,6 @@
 package com.example.tugas9
 
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,57 +9,84 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(viewModel: ChatViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     var inputText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    // Auto-scroll to bottom when new messages arrive
-    LaunchedEffect(uiState.messages.size, uiState.isLoading) {
+    // Auto-scroll to bottom
+    LaunchedEffect(uiState.messages.size) {
         if (uiState.messages.isNotEmpty()) {
-            listState.animateScrollToItem(uiState.messages.size)
+            listState.animateScrollToItem(uiState.messages.size - 1)
+        }
+    }
+
+    // Handle Error with Snackbar
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearError()
         }
     }
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Asisten AI", fontWeight = FontWeight.Bold)
+                        Text("Cerdas & Responsif", style = MaterialTheme.typography.labelSmall)
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             ChatInputBar(
                 text = inputText,
                 onTextChange = { inputText = it },
                 onSend = {
-                    viewModel.sendMessage(inputText)
-                    inputText = ""
+                    if (inputText.isNotBlank()) {
+                        viewModel.sendMessage(inputText)
+                        inputText = ""
+                    }
                 },
-                enabled = !uiState.isLoading && inputText.isNotBlank()
+                enabled = !uiState.isLoading
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             LazyColumn(
                 state = listState,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(uiState.messages) { message ->
+                items(uiState.messages, key = { it.id }) { message ->
                     ChatBubble(message)
                 }
 
@@ -66,19 +94,6 @@ fun ChatScreen(viewModel: ChatViewModel) {
                     item {
                         TypingIndicator()
                     }
-                }
-            }
-
-            if (uiState.errorMessage != null) {
-                Snackbar(
-                    modifier = Modifier.padding(16.dp),
-                    action = {
-                        TextButton(onClick = { viewModel.clearError() }) {
-                            Text("OK")
-                        }
-                    }
-                ) {
-                    Text(uiState.errorMessage!!)
                 }
             }
         }
@@ -89,28 +104,49 @@ fun ChatScreen(viewModel: ChatViewModel) {
 fun ChatBubble(message: ChatMessage) {
     val isUser = message.isUser
     val alignment = if (isUser) Alignment.CenterEnd else Alignment.CenterStart
-    val containerColor = if (isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer
-    val contentColor = if (isUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondaryContainer
-    val shape = if (isUser) {
-        RoundedCornerShape(16.dp, 16.dp, 0.dp, 16.dp)
+    
+    val containerColor = if (isUser) {
+        MaterialTheme.colorScheme.primary
     } else {
-        RoundedCornerShape(16.dp, 16.dp, 16.dp, 0.dp)
+        MaterialTheme.colorScheme.secondaryContainer
+    }
+    
+    val contentColor = if (isUser) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSecondaryContainer
     }
 
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = alignment) {
-        Column(
-            modifier = Modifier
-                .clip(shape)
-                .background(containerColor)
-                .padding(12.dp)
-                .widthIn(max = 280.dp)
+    val bubbleShape = if (isUser) {
+        RoundedCornerShape(16.dp, 16.dp, 2.dp, 16.dp)
+    } else {
+        RoundedCornerShape(16.dp, 16.dp, 16.dp, 2.dp)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = if (isUser) Alignment.End else Alignment.Start
+    ) {
+        Surface(
+            color = containerColor,
+            contentColor = contentColor,
+            shape = bubbleShape,
+            shadowElevation = 1.dp,
+            modifier = Modifier.widthIn(max = 300.dp)
         ) {
             Text(
                 text = message.text,
-                color = contentColor,
-                fontSize = 15.sp
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                fontSize = 15.sp,
+                lineHeight = 20.sp
             )
         }
+        Text(
+            text = if (isUser) "Anda" else "Asisten AI",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier.padding(top = 4.dp, start = 4.dp, end = 4.dp)
+        )
     }
 }
 
@@ -118,26 +154,29 @@ fun ChatBubble(message: ChatMessage) {
 fun TypingIndicator() {
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp, 16.dp, 16.dp, 0.dp))
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+            .padding(vertical = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(3) { index ->
             val infiniteTransition = rememberInfiniteTransition()
-            val alpha by infiniteTransition.animateFloat(
-                initialValue = 0.2f,
-                targetValue = 1f,
+            val yOffset by infiniteTransition.animateFloat(
+                initialValue = 0f,
+                targetValue = -6f,
                 animationSpec = infiniteRepeatable(
-                    animation = tween(600, delayMillis = index * 200),
+                    animation = tween(400, delayMillis = index * 150),
                     repeatMode = RepeatMode.Reverse
                 )
             )
             Box(
                 modifier = Modifier
-                    .size(8.dp)
+                    .size(6.dp)
+                    .offset(y = yOffset.dp)
                     .clip(RoundedCornerShape(50))
-                    .background(MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = alpha))
+                    .background(MaterialTheme.colorScheme.primary)
             )
         }
     }
@@ -151,12 +190,15 @@ fun ChatInputBar(
     enabled: Boolean
 ) {
     Surface(
-        tonalElevation = 2.dp,
+        tonalElevation = 8.dp,
+        shadowElevation = 8.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .navigationBarsPadding()
+                .imePadding()
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -165,19 +207,34 @@ fun ChatInputBar(
                 value = text,
                 onValueChange = onTextChange,
                 modifier = Modifier.weight(1f),
-                placeholder = { Text("Tanya asisten angkringan...") },
-                shape = RoundedCornerShape(24.dp),
-                maxLines = 3
+                placeholder = { Text("Ketik pesan...") },
+                shape = RoundedCornerShape(28.dp),
+                maxLines = 4,
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                )
             )
-            FloatingActionButton(
+            IconButton(
                 onClick = onSend,
-                enabled = enabled,
-                containerColor = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = if (enabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.size(48.dp)
+                enabled = enabled && text.isNotBlank(),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .background(
+                        if (enabled && text.isNotBlank()) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.surfaceVariant
+                    )
             ) {
-                Icon(Icons.Default.Send, contentDescription = "Send")
+                Icon(
+                    Icons.AutoMirrored.Filled.Send,
+                    contentDescription = "Send",
+                    tint = if (enabled && text.isNotBlank()) 
+                        MaterialTheme.colorScheme.onPrimary 
+                    else 
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

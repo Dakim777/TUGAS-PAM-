@@ -1,6 +1,7 @@
 package com.example.tugas9
 
 import kotlinx.serialization.Serializable
+import com.benasher44.uuid.uuid4
 
 data class ChatUiState(
     val messages: List<ChatMessage> = emptyList(),
@@ -10,7 +11,8 @@ data class ChatUiState(
 
 @Serializable
 data class ChatMessage(
+    val id: String = uuid4().toString(),
     val text: String,
     val isUser: Boolean,
-    val timestamp: Long = 0L // Bisa ditambahkan jika perlu
+    val timestamp: Long = 0L
 )

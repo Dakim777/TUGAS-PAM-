@@ -16,9 +16,11 @@ class ChatViewModel(private val repository: AIRepository) : ViewModel() {
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
     fun sendMessage(text: String) {
-        if (text.isBlank()) return
+        val trimmedText = text.trim()
+        if (trimmedText.isBlank() || _uiState.value.isLoading) return
 
-        val userMessage = ChatMessage(text = text, isUser = true)
+        // Tambahkan pesan user ke UI
+        val userMessage = ChatMessage(text = trimmedText, isUser = true)
         _uiState.update { 
             it.copy(
                 messages = it.messages + userMessage,
@@ -27,17 +29,19 @@ class ChatViewModel(private val repository: AIRepository) : ViewModel() {
             )
         }
 
-        executeWithRetry(text)
+        // Kirim seluruh riwayat pesan agar AI punya konteks
+        executeWithHistory()
     }
 
-    private fun executeWithRetry(prompt: String, maxRetries: Int = 3) {
+    private fun executeWithHistory(maxRetries: Int = 2) {
         viewModelScope.launch {
             var currentRetry = 0
             var succeeded = false
+            val currentHistory = _uiState.value.messages
 
             while (currentRetry <= maxRetries && !succeeded) {
                 try {
-                    val result = repository.sendMessage(prompt)
+                    val result = repository.sendMessage(currentHistory)
                     result.onSuccess { botResponse ->
                         _uiState.update { 
                             it.copy(
@@ -47,18 +51,19 @@ class ChatViewModel(private val repository: AIRepository) : ViewModel() {
                         }
                         succeeded = true
                     }.onFailure { error ->
-                        throw error // Rethrow to handle in catch block for retry logic
+                        throw error 
                     }
                 } catch (e: Exception) {
                     if (e is GeminiError.RateLimitExceeded && currentRetry < maxRetries) {
-                        val waitTime = 2.0.pow(currentRetry).toLong() * 1000
+                        val waitTime = 2.0.pow(currentRetry).toLong() * 2000
                         delay(waitTime)
                         currentRetry++
                     } else {
                         val message = when (e) {
-                            is GeminiError.Unauthorized -> "Error: Api Key tidak valid."
-                            is GeminiError.RateLimitExceeded -> "Error: Terlalu banyak permintaan. Coba lagi nanti."
-                            else -> "Terjadi kesalahan: ${e.message}"
+                            is GeminiError.Unauthorized -> "Konfigurasi API bermasalah. Periksa kunci API Anda."
+                            is GeminiError.RateLimitExceeded -> "Terlalu sibuk. Tunggu sebentar ya..."
+                            is GeminiError.NetworkError -> "Koneksi terputus. Coba cek internetmu."
+                            else -> "Waduh, ada kendala: ${e.message ?: "Error teknis"}"
                         }
                         _uiState.update { 
                             it.copy(isLoading = false, errorMessage = message) 

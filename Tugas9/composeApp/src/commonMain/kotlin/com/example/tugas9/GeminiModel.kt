@@ -1,10 +1,12 @@
 package com.example.tugas9
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GeminiRequest(
-    val contents: List<Content>
+    val contents: List<Content>,
+    @SerialName("system_instruction") val systemInstruction: Content? = null
 )
 
 @Serializable
