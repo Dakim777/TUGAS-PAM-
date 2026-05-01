@@ -6,13 +6,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GeminiRequest(
     val contents: List<Content>,
-    @SerialName("system_instruction") val systemInstruction: Content? = null
+    @SerialName("system_instruction") val systemInstruction: SystemContent? = null
+)
+
+@Serializable
+data class SystemContent(
+    val parts: List<Part>
 )
 
 @Serializable
 data class Content(
-    val parts: List<Part>,
-    val role: String? = null
+    val role: String,
+    val parts: List<Part>
 )
 
 @Serializable
@@ -29,13 +34,10 @@ data class GeminiResponse(
 @Serializable
 data class Candidate(
     val content: Content? = null,
-    val finishReason: String? = null,
-    val index: Int? = null
+    val finishReason: String? = null
 )
 
 @Serializable
 data class UsageMetadata(
-    val promptTokenCount: Int? = null,
-    val candidatesTokenCount: Int? = null,
     val totalTokenCount: Int? = null
 )

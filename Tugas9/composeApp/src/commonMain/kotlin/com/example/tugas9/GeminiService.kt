@@ -10,65 +10,59 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-/**
- * Service layer untuk berinteraksi dengan Google Gemini API.
- * Mengimplementasikan Ktor Client dengan ContentNegotiation JSON.
- */
 class GeminiService(private val apiKey: String) {
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
                 encodeDefaults = false
-                explicitNulls = false // Mencegah field null ikut terkirim
+                explicitNulls = false
             })
         }
         install(HttpTimeout) {
             requestTimeoutMillis = 60000
             connectTimeoutMillis = 30000
-            socketTimeoutMillis = 60000
         }
     }
 
-    suspend fun generateContent(contents: List<Content>, systemInstruction: String? = null): GeminiResponse {
-        val cleanApiKey = apiKey.trim()
+    // Mengembalikan Result<GeminiResponse> untuk penanganan error yang lebih baik di Repository
+    suspend fun generateContent(contents: List<Content>, systemInstructionText: String? = null): Result<GeminiResponse> {
+        val cleanApiKey = apiKey.trim().removeSurrounding("\"")
         
-        if (cleanApiKey.isBlank() || cleanApiKey.startsWith("YOUR_API") || cleanApiKey == "null") {
-            throw GeminiError.Unauthorized
+        if (cleanApiKey.isBlank() || cleanApiKey.contains("YOUR_API")) {
+            return Result.failure(AIError.Unauthorized)
         }
-        
+
         return try {
-            // Menggunakan v1beta karena fitur system_instruction lebih stabil di sini
             val response = client.post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent") {
                 url { parameters.append("key", cleanApiKey) }
                 contentType(ContentType.Application.Json)
                 setBody(GeminiRequest(
                     contents = contents,
-                    // PENTING: Untuk system_instruction, kita kirim object Content TANPA field role.
-                    systemInstruction = systemInstruction?.let {
-                        Content(parts = listOf(Part(text = it)), role = null)
+                    systemInstruction = systemInstructionText?.let { 
+                        SystemContent(parts = listOf(Part(text = it)))
                     }
                 ))
             }
 
             if (response.status == HttpStatusCode.OK) {
-                response.body()
+                Result.success(response.body())
             } else {
                 val errorBody = response.bodyAsText()
-                println("GEMINI ERROR DETAIL: $errorBody")
-                
+                println("GEMINI ERROR: ${response.status} - $errorBody")
                 when (response.status) {
-                    HttpStatusCode.Unauthorized -> throw GeminiError.Unauthorized
-                    HttpStatusCode.TooManyRequests -> throw GeminiError.RateLimitExceeded
-                    else -> {
-                        // Memperbaiki pesan error agar lebih informatif sesuai rubrik
-                        throw GeminiError.Unknown(response.status.value, "API Error ${response.status.value}: $errorBody")
+                    HttpStatusCode.Unauthorized -> Result.failure(AIError.Unauthorized)
+                    HttpStatusCode.TooManyRequests -> {
+                        // Coba baca header Retry-After untuk info durasi delay
+                        val retryAfter = response.headers["Retry-After"]?.toIntOrNull() ?: 60 // Default 60 detik jika header tidak ada
+                        Result.failure(AIError.RateLimited(retryAfter))
                     }
+                    else -> Result.failure(AIError.Unknown(response.status.value, "API Error: $errorBody"))
                 }
             }
         } catch (e: Exception) {
-            if (e is GeminiError) throw e
-            throw GeminiError.NetworkError("Koneksi gagal: ${e.message}")
+            // Menangkap error jaringan atau Ktor
+            Result.failure(AIError.NetworkError(e.message ?: "Error jaringan tidak diketahui"))
         }
     }
 }

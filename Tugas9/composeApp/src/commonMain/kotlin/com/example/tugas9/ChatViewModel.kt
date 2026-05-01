@@ -19,7 +19,6 @@ class ChatViewModel(private val repository: AIRepository) : ViewModel() {
         val trimmedText = text.trim()
         if (trimmedText.isBlank() || _uiState.value.isLoading) return
 
-        // Tambahkan pesan user ke UI
         val userMessage = ChatMessage(text = trimmedText, isUser = true)
         _uiState.update { 
             it.copy(
@@ -29,47 +28,40 @@ class ChatViewModel(private val repository: AIRepository) : ViewModel() {
             )
         }
 
-        // Kirim seluruh riwayat pesan agar AI punya konteks
-        executeWithHistory()
+        executeTranslation()
     }
 
-    private fun executeWithHistory(maxRetries: Int = 2) {
+    private fun executeTranslation() {
         viewModelScope.launch {
-            var currentRetry = 0
-            var succeeded = false
-            val currentHistory = _uiState.value.messages
+            val lastUserMessage = _uiState.value.messages.lastOrNull { it.isUser }?.text ?: return@launch
 
-            while (currentRetry <= maxRetries && !succeeded) {
-                try {
-                    val result = repository.sendMessage(currentHistory)
-                    result.onSuccess { botResponse ->
-                        _uiState.update { 
-                            it.copy(
-                                messages = it.messages + ChatMessage(text = botResponse, isUser = false),
-                                isLoading = false
-                            )
-                        }
-                        succeeded = true
-                    }.onFailure { error ->
-                        throw error 
+            try {
+                val result = repository.translateText(lastUserMessage)
+                result.onSuccess { botResponse ->
+                    _uiState.update { 
+                        it.copy(
+                            messages = it.messages + ChatMessage(text = botResponse, isUser = false),
+                            isLoading = false
+                        )
                     }
-                } catch (e: Exception) {
-                    if (e is GeminiError.RateLimitExceeded && currentRetry < maxRetries) {
-                        val waitTime = 2.0.pow(currentRetry).toLong() * 2000
-                        delay(waitTime)
-                        currentRetry++
-                    } else {
-                        val message = when (e) {
-                            is GeminiError.Unauthorized -> "Konfigurasi API bermasalah. Periksa kunci API Anda."
-                            is GeminiError.RateLimitExceeded -> "Terlalu sibuk. Tunggu sebentar ya..."
-                            is GeminiError.NetworkError -> "Koneksi terputus. Coba cek internetmu."
-                            else -> "Waduh, ada kendala: ${e.message ?: "Error teknis"}"
-                        }
-                        _uiState.update { 
-                            it.copy(isLoading = false, errorMessage = message) 
-                        }
-                        break
+                }.onFailure { error ->
+                    println("ChatViewModel Error AI: ${error.message}") // Logging error
+                    val message = when (error) {
+                        is AIError.Unauthorized -> "Autentikasi gagal. Cek API Key Anda."
+                        is AIError.RateLimited -> error.message // Pesan dari AIError.RateLimited
+                        is AIError.NetworkError -> "Koneksi internet bermasalah: ${error.message}"
+                        is AIError.Unknown -> "Terjadi kendala: ${error.message}"
+                        else -> "Terjadi kendala tidak diketahui: ${error.message}"
                     }
+                    _uiState.update { 
+                        it.copy(isLoading = false, errorMessage = message) 
+                    }
+                }
+            } catch (e: Exception) {
+                // Ini akan menangkap error yang tidak ditangani oleh onFaliure (misal Exception dari retryWithBackoff)
+                println("ChatViewModel Catch All Error: ${e.message}")
+                _uiState.update { 
+                    it.copy(isLoading = false, errorMessage = e.message ?: "Terjadi kesalahan fatal.")
                 }
             }
         }

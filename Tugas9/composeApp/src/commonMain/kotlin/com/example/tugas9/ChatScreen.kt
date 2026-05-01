@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,8 +48,8 @@ fun ChatScreen(viewModel: ChatViewModel) {
             CenterAlignedTopAppBar(
                 title = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Asisten AI", fontWeight = FontWeight.Bold)
-                        Text("Cerdas & Responsif", style = MaterialTheme.typography.labelSmall)
+                        Text("AI Translator Pro", fontWeight = FontWeight.Bold)
+                        Text("Terjemahan Cepat & Akurat", style = MaterialTheme.typography.labelSmall)
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -96,6 +95,19 @@ fun ChatScreen(viewModel: ChatViewModel) {
                     }
                 }
             }
+            
+            // Komponen Text sementara untuk debugging error
+            uiState.errorMessage?.let { error ->
+                Text(
+                    text = "Error Debug: $error",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 80.dp) // Sesuaikan agar tidak tertutup input bar
+                        .background(Color.Red.copy(alpha = 0.2f))
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
@@ -103,7 +115,6 @@ fun ChatScreen(viewModel: ChatViewModel) {
 @Composable
 fun ChatBubble(message: ChatMessage) {
     val isUser = message.isUser
-    val alignment = if (isUser) Alignment.CenterEnd else Alignment.CenterStart
     
     val containerColor = if (isUser) {
         MaterialTheme.colorScheme.primary
@@ -132,7 +143,7 @@ fun ChatBubble(message: ChatMessage) {
             contentColor = contentColor,
             shape = bubbleShape,
             shadowElevation = 1.dp,
-            modifier = Modifier.widthIn(max = 300.dp)
+            modifier = Modifier.widthIn(max = 320.dp)
         ) {
             Text(
                 text = message.text,
@@ -142,7 +153,7 @@ fun ChatBubble(message: ChatMessage) {
             )
         }
         Text(
-            text = if (isUser) "Anda" else "Asisten AI",
+            text = if (isUser) "Teks Asli" else "Hasil Terjemahan",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.outline,
             modifier = Modifier.padding(top = 4.dp, start = 4.dp, end = 4.dp)
@@ -207,7 +218,7 @@ fun ChatInputBar(
                 value = text,
                 onValueChange = onTextChange,
                 modifier = Modifier.weight(1f),
-                placeholder = { Text("Ketik pesan...") },
+                placeholder = { Text("Masukkan teks untuk diterjemahkan...") },
                 shape = RoundedCornerShape(28.dp),
                 maxLines = 4,
                 colors = OutlinedTextFieldDefaults.colors(
