@@ -78,4 +78,4 @@ Beberapa kendala teknis yang diselesaikan dalam pengerjaan Tugas 9 ini meliputi:
 3. Jalankan aplikasi melalui emulator Android atau simulator iOS.
 
 ---
-**© 2026 Muhammad Daffa Hakim Matondang - Tugas 9 PAM ITERA**
+**© 2026 Muhammad Daffa Hakim Matondang - Tugas 9 PAM ITERA** 
