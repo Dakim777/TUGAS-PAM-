@@ -50,14 +50,25 @@ kotlin {
             // === TAMBAHAN: UNIT TEST & FLOW TEST ===
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("app.cash.turbine:turbine:1.0.0")
-            implementation("io.mockk:mockk:1.13.9")
             implementation("io.insert-koin:koin-test:3.5.3")
+            // MOCKK DIHAPUS DARI SINI AGAR IOS AMAN
+        }
+
+        // === TAMBAHAN BLOK INI KHUSUS UNTUK MOCKK (HANYA JALAN DI ANDROID) ===
+        val androidUnitTest by getting {
+            dependencies {
+                implementation("io.mockk:mockk:1.13.9")
+            }
         }
 
         // === TAMBAHAN: COMPOSE UI TEST (ANDROID) ===
         val androidInstrumentedTest by getting {
             dependencies {
                 implementation("androidx.compose.ui:ui-test-junit4")
+                implementation(kotlin("test-junit"))
+                implementation("junit:junit:4.13.2")
+                implementation("androidx.test.ext:junit:1.1.5")
+                implementation("androidx.compose.ui:ui-test-junit4:1.6.0")
             }
         }
     }

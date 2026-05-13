@@ -6,17 +6,18 @@ import com.angkringan.tugas10.data.NoteRepositoryImpl
 import com.angkringan.tugas10.data.NoteValidator
 import com.angkringan.tugas10.presentation.NotesViewModel
 import org.koin.core.context.startKoin
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val dataModule = module {
     single { NoteDatabase() }
+    // Koin akan otomatis mengenali get() ini untuk mengambil NoteDatabase
     single<NoteRepository> { NoteRepositoryImpl(get()) }
     factory { NoteValidator() }
 }
 
 val viewModelModule = module {
-    viewModel { NotesViewModel(get()) }
+    // Ubah viewModel menjadi factory untuk KMP
+    factory { NotesViewModel(get()) }
 }
 
 val allModules = listOf(dataModule, viewModelModule)
