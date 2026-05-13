@@ -40,35 +40,47 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            // === TAMBAHAN: KOIN DI ===
+            // === KOIN DI ===
             implementation("io.insert-koin:koin-core:3.5.3")
             implementation("io.insert-koin:koin-compose:1.1.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
 
-            // === TAMBAHAN: UNIT TEST & FLOW TEST ===
+            // === UNIT TEST & FLOW TEST ===
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("app.cash.turbine:turbine:1.0.0")
             implementation("io.insert-koin:koin-test:3.5.3")
-            // MOCKK DIHAPUS DARI SINI AGAR IOS AMAN
         }
 
-        // === TAMBAHAN BLOK INI KHUSUS UNTUK MOCKK (HANYA JALAN DI ANDROID) ===
+        // === FIX MOCKK & DEPENDENCIES UNTUK ANDROID UNIT TEST ===
         val androidUnitTest by getting {
             dependencies {
                 implementation("io.mockk:mockk:1.13.9")
+
+                // Ditulis eksplisit di sini agar Android Studio tidak bug/merah saat file dipindah
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+                implementation("app.cash.turbine:turbine:1.0.0")
+                implementation("io.insert-koin:koin-test:3.5.3")
+                implementation(libs.kotlin.test)
             }
         }
 
-        // === TAMBAHAN: COMPOSE UI TEST (ANDROID) ===
+        // === COMPOSE UI TEST (ANDROID) ===
         val androidInstrumentedTest by getting {
             dependencies {
-                implementation("androidx.compose.ui:ui-test-junit4")
                 implementation(kotlin("test-junit"))
                 implementation("junit:junit:4.13.2")
-                implementation("androidx.test.ext:junit:1.1.5")
-                implementation("androidx.compose.ui:ui-test-junit4:1.6.0")
+
+                // FIX ERROR INPUTMANAGER UNTUK ANDROID 14+
+                implementation("androidx.test:core-ktx:1.6.1")
+                implementation("androidx.test.ext:junit:1.2.1")
+                implementation("androidx.test:runner:1.6.1")
+                implementation("androidx.test:rules:1.6.1")
+                implementation("androidx.test.espresso:espresso-core:3.6.1")
+
+                // UPDATE VERSI COMPOSE UI TEST
+                implementation("androidx.compose.ui:ui-test-junit4:1.6.7")
             }
         }
     }
@@ -84,6 +96,9 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
+        // === RUNNER UNTUK INSTRUMENTED TEST ===
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -91,6 +106,13 @@ android {
         }
     }
     buildTypes {
+        getByName("debug") {
+            // Tambahkan dua baris ini saja
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
+
+
         getByName("release") {
             isMinifyEnabled = false
         }
@@ -104,6 +126,6 @@ android {
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 
-    // === TAMBAHAN: UI TEST MANIFEST (ANDROID) ===
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // === UI TEST MANIFEST ===
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.7")
 }

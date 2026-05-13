@@ -3,12 +3,8 @@ package com.angkringan.tugas10.presentation
 import app.cash.turbine.test
 import com.angkringan.tugas10.data.Note
 import com.angkringan.tugas10.data.NoteRepository
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.runs
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -17,20 +13,39 @@ import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
+
+// --- FAKE REPOSITORY SEBAGAI PENGGANTI MOCKK ---
+class FakeNoteRepository : NoteRepository {
+    var isInsertCalled = false
+    var isDeleteCalled = false
+    private val dummyNotes = listOf(Note(1, "Test", "Content"))
+
+    override fun getAllNotes(): Flow<List<Note>> {
+        return flowOf(dummyNotes)
+    }
+
+    override suspend fun insertNote(note: Note) {
+        isInsertCalled = true
+    }
+
+    override suspend fun deleteNote(id: Long) {
+        isDeleteCalled = true
+    }
+}
 
 class NotesViewModelTest {
-    private lateinit var mockRepo: NoteRepository
+    private lateinit var fakeRepo: FakeNoteRepository
     private lateinit var viewModel: NotesViewModel
     private val testDispatcher = StandardTestDispatcher()
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        mockRepo = mockk()
-        val dummyNotes = listOf(Note(1, "Test", "Content"))
-        coEvery { mockRepo.getAllNotes() } returns flowOf(dummyNotes)
-        viewModel = NotesViewModel(mockRepo)
+        fakeRepo = FakeNoteRepository() // Pakai Fake
+        viewModel = NotesViewModel(fakeRepo)
     }
 
     @AfterTest
@@ -48,22 +63,22 @@ class NotesViewModelTest {
         }
     }
 
-    // Kasus 2 (MockK Verification)
+    // Kasus 2 (Pengganti coVerify MockK)
     @Test
     fun test2_addNoteCallsRepository() = runTest {
-        coEvery { mockRepo.insertNote(any()) } just runs
         viewModel.addNote("New", "Note")
         testDispatcher.scheduler.advanceUntilIdle()
-        coVerify { mockRepo.insertNote(any()) }
+        // Memastikan fungsi insert di repository beneran dipanggil
+        assertTrue(fakeRepo.isInsertCalled)
     }
 
-    // Kasus 3 (MockK Verification)
+    // Kasus 3 (Pengganti coVerify MockK)
     @Test
     fun test3_deleteNoteCallsRepository() = runTest {
-        coEvery { mockRepo.deleteNote(1L) } just runs
         viewModel.deleteNote(1L)
         testDispatcher.scheduler.advanceUntilIdle()
-        coVerify { mockRepo.deleteNote(1L) }
+        // Memastikan fungsi delete di repository beneran dipanggil
+        assertTrue(fakeRepo.isDeleteCalled)
     }
 
     // Kasus 4 (Turbine Flow Test 2)
