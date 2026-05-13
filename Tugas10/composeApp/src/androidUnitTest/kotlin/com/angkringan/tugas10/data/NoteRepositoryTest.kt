@@ -34,7 +34,7 @@ class NoteRepositoryTest {
     @Test
     fun test3_deleteNoteRemovesFromList() = runTest {
         repository.insertNote(Note(1, "A", "B"))
-        repository.deleteNote(1)
+        repository.deleteNote(1L)
         val notes = repository.getAllNotes().first()
         assertTrue(notes.isEmpty())
     }
@@ -42,7 +42,7 @@ class NoteRepositoryTest {
     @Test
     fun test4_deleteNonExistentNoteDoesNothing() = runTest {
         repository.insertNote(Note(1, "A", "B"))
-        repository.deleteNote(99)
+        repository.deleteNote(99L)
         val notes = repository.getAllNotes().first()
         assertEquals(1, notes.size)
     }
