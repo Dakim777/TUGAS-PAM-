@@ -16,7 +16,6 @@ fun NotesScreen(uiState: NotesUiState) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (uiState) {
             is NotesUiState.Loading -> {
-                // Memberikan Test Tag "loading_indicator"
                 CircularProgressIndicator(modifier = Modifier.testTag("loading_indicator"))
             }
             is NotesUiState.Error -> {
@@ -24,10 +23,8 @@ fun NotesScreen(uiState: NotesUiState) {
             }
             is NotesUiState.Success -> {
                 if (uiState.notes.isEmpty()) {
-                    // Memberikan Test Tag "empty_text"
                     Text(text = "Belum ada catatan", modifier = Modifier.testTag("empty_text"))
                 } else {
-                    // Memberikan Test Tag "notes_list"
                     LazyColumn(modifier = Modifier.fillMaxSize().testTag("notes_list")) {
                         items(uiState.notes) { note ->
                             Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
